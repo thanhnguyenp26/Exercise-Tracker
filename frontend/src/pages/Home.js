@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useWorkoutContext } from '../hooks/useWorkoutContext';
 
@@ -7,6 +7,7 @@ import WorkoutDetails from '../components/WorkoutDetails';
 import WorkoutForm from '../components/WorkoutForm';
 
 const Home = () => {
+  const [currentID, setCurrentID] = useState('')
   const { workouts, dispatch } = useWorkoutContext();
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -28,10 +29,11 @@ const Home = () => {
             <WorkoutDetails
               key={workout._id}
               workout={workout}
+              setCurrentID={setCurrentID}
             ></WorkoutDetails>
           ))}
       </div>
-      <WorkoutForm />
+      <WorkoutForm currentID={currentID} setCurrentID={setCurrentID} />
     </div>
   );
 };
