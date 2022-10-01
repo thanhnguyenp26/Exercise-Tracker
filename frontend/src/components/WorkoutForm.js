@@ -4,8 +4,10 @@ import { useWorkoutContext } from '../hooks/useWorkoutContext';
 const WorkoutForm = ({ currentID, setCurrentID }) => {
   const [workoutData, setWorkoutData] = useState({
     title: '',
-    load: '',
-    reps: ''
+    load: 0,
+    reps: 0,
+    km: 0,
+    heartrate: 0,
   });
   const { workouts, dispatch } = useWorkoutContext();
   const [error, setError] = useState(null);
@@ -15,11 +17,11 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
     ? workouts.find((workout) => workout._id === currentID)
     : null;
 
-    useEffect(() => {
-      if (workout) {
-        setWorkoutData(workout);
-      }
-    }, [workout]);
+  useEffect(() => {
+    if (workout) {
+      setWorkoutData(workout);
+    }
+  }, [workout]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,8 +53,10 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
       setEmptyFields([]);
       setWorkoutData({
         title: '',
-        load: '',
-        reps: '',
+        load: 0,
+        reps: 0,
+        km: 0,
+        heartrate: 0,
       });
       setError(null);
       if (!currentID) {
@@ -66,7 +70,17 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
     }
   };
 
-
+  useEffect(() => {
+    if (!currentID) {
+      setWorkoutData({
+        title: '',
+        load: 0,
+        reps: 0,
+        km: 0,
+        heartrate: 0,
+      });
+    }
+  }, [currentID]);
 
   return (
     <form className="create" onSubmit={handleSubmit}>
@@ -82,6 +96,7 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
       />
       <label>Load (in kg): </label>
       <input
+        min={0}
         type="number"
         onChange={(e) =>
           setWorkoutData({ ...workoutData, load: e.target.value })
@@ -91,6 +106,7 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
       />
       <label>Reps: </label>
       <input
+        min={0}
         type="number"
         onChange={(e) =>
           setWorkoutData({ ...workoutData, reps: e.target.value })
@@ -98,9 +114,25 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
         value={workoutData.reps}
         className={emptyFields.includes('reps') ? 'error' : ''}
       />
-      <button>
-        {!currentID ? 'Add Workout' : `Edit`}
-      </button>
+      <label>Km: </label>
+      <input
+        min={0}
+        type="number"
+        onChange={(e) => setWorkoutData({ ...workoutData, km: e.target.value })}
+        value={workoutData.km}
+        className={emptyFields.includes('reps') ? 'error' : ''}
+      />
+      <label>Heart Rate: </label>
+      <input
+        min={0}
+        type="number"
+        onChange={(e) =>
+          setWorkoutData({ ...workoutData, heartrate: e.target.value })
+        }
+        value={workoutData.heartrate}
+        className={emptyFields.includes('reps') ? 'error' : ''}
+      />
+      <button>{!currentID ? 'Add Workout' : `Edit`}</button>
       {error && <div className="error">{error}</div>}
     </form>
   );

@@ -7,8 +7,8 @@ import WorkoutDetails from '../components/WorkoutDetails';
 import WorkoutForm from '../components/WorkoutForm';
 
 const Home = () => {
-  const [currentID, setCurrentID] = useState('')
-  const { workouts, dispatch } = useWorkoutContext();
+  const [currentID, setCurrentID] = useState('');
+  const { workouts, dispatch, query } = useWorkoutContext();
   useEffect(() => {
     const fetchWorkouts = async () => {
       const response = await fetch('/api/workouts');
@@ -20,18 +20,20 @@ const Home = () => {
     };
 
     fetchWorkouts();
-  }, [dispatch]);
+  }, [dispatch, query]);
   return (
     <div className="home">
       <div className="workouts">
-        {workouts &&
-          workouts.map((workout) => (
-            <WorkoutDetails
-              key={workout._id}
-              workout={workout}
-              setCurrentID={setCurrentID}
-            ></WorkoutDetails>
-          ))}
+        {workouts && 
+          workouts 
+            .filter((workout) => workout.title.toLowerCase().includes(query))
+            .map((workout) => (
+              <WorkoutDetails
+                key={workout._id}
+                workout={workout}
+                setCurrentID={setCurrentID}
+              ></WorkoutDetails>
+            ))}
       </div>
       <WorkoutForm currentID={currentID} setCurrentID={setCurrentID} />
     </div>

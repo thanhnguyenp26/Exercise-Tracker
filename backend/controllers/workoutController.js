@@ -23,23 +23,15 @@ const getWorkout = async (req, res) => {
 
 // CREATE new workout
 const createWorkout = async (req, res) => {
-  const { title, load, reps } = req.body;
+  const { title, load, reps, km, heartrate } = req.body;
   let emptyFields = [];
-  if(!title) {
-    emptyFields.push('title')
-  }
-  if(!load) {
-    emptyFields.push('load')
-  }
-  if(!reps) {
-    emptyFields.push('reps')
-  }
+  
   if (emptyFields .length > 0) {
     return res.status(400).json({error: 'Please fill in all the fields', emptyFields})
   }
   try {
 
-    const workout = await Workout.create({ title, load, reps });
+    const workout = await Workout.create({ title, load, reps, km, heartrate });
     res.status(200).json(workout);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -49,6 +41,7 @@ const createWorkout = async (req, res) => {
 // DELETE a workout
 const deleteWorkout = async (req, res) => {
   const { id } = req.params;
+  
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: 'No such workout' });
   }

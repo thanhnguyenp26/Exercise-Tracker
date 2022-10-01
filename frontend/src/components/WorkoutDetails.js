@@ -9,6 +9,7 @@ const WorkoutDetails = ({ workout, setCurrentID }) => {
   }
   const { dispatch } = useWorkoutContext();
   const handleClick = async () => {
+    setCurrentID('')
     const response = await fetch('/api/workouts/' + workout._id, {
       method: 'DELETE',
     });
@@ -28,6 +29,14 @@ const WorkoutDetails = ({ workout, setCurrentID }) => {
         <p>
           <strong>Reps: </strong>
           {workout.reps}
+        </p>
+        <p>
+          <strong>Km: </strong>
+          {workout.km}
+        </p>
+        <p>
+          <strong>Heartrate: </strong>
+          {workout.heartrate}
         </p>
         <p>
           {formatDistanceToNow(new Date(workout.createdAt), {

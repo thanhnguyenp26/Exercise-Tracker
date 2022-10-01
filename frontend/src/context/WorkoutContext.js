@@ -6,24 +6,26 @@ export const workoutsReducer = (state, action) => {
   switch (action.type) {
     case 'SET_WORKOUTS':
       return {
-        workouts: action.payload,
+        ...state, workouts: action.payload,
       };
     case 'CREATE_WORKOUT':
       return {
-        workouts: [action.payload, ...state.workouts],
+        ...state, workouts: [action.payload, ...state.workouts],
       };
     case 'DELETE_WORKOUT':
       return {
-        workouts: state.workouts.filter(
+        ...state, workouts: state.workouts.filter(
           (workout) => workout._id !== action.payload._id
         ),
       };
     case 'UPDATE_WORKOUT':
       return {
-        workouts: state.workouts.map(
+        ...state, workouts: state.workouts.map(
           (workout) => workout._id !== action.payload._id? workout: action.payload
         ),
       };
+    case 'SEARCH_WORKOUT':
+      return {...state, query: action.payload}
     default:
       return state;
   }
@@ -33,6 +35,7 @@ export const WorkoutsContextProvider = ({ children }) => {
   // dynamic state
   const [state, dispatch] = useReducer(workoutsReducer, {
     workouts: null,
+    query: null
   });
 
   return (
