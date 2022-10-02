@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import useStyles from './styles';
 import { useWorkoutContext } from '../hooks/useWorkoutContext';
 import { useAuthContext } from '../hooks/useAuthContext';
 
@@ -17,7 +16,7 @@ import { useLogout } from '../hooks/useLogout';
 const Navbar = () => {
   const [query, setQuery] = useState('');
   const { dispatch } = useWorkoutContext();
-  const classes = useStyles();
+  
 
   const { user } = useAuthContext();
 
@@ -37,7 +36,7 @@ const Navbar = () => {
         <Link to="/">
           <h1>Workout Buddy</h1>
         </Link>
-        <Paper className={classes.searchBar}>
+        <Paper sx={{ padding: '0 1rem' }}>
           <InputBase
             placeholder="Search a workout"
             sx={{ fontFamily: 'Poppins' }}
