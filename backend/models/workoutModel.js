@@ -26,6 +26,10 @@ const workoutSchema = new Schema(
       type: Number,
       min: 0,
     },
+    user_id:{
+      type:String,
+      required:true
+    }
   },
   { timestamps: true }
 );

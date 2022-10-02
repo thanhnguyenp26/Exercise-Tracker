@@ -4,7 +4,8 @@ const { response } = require('express');
 
 // GET all workouts
 const getWorkouts = async (req, res) => {
-  const workouts = await Workout.find({}).sort({ createdAt: -1 });
+  const user_id = req.user._id
+  const workouts = await Workout.find({user_id}).sort({ createdAt: -1 });
   res.status(200).json(workouts);
 };
 
@@ -30,8 +31,8 @@ const createWorkout = async (req, res) => {
     return res.status(400).json({error: 'Please fill in all the fields', emptyFields})
   }
   try {
-
-    const workout = await Workout.create({ title, load, reps, km, heartrate });
+    const user_id = req.user._id
+    const workout = await Workout.create({ title, load, reps, km, heartrate, user_id });
     res.status(200).json(workout);
   } catch (error) {
     res.status(400).json({ error: error.message });

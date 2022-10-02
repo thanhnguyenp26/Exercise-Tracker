@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthContext } from '../hooks/useAuthContext';
 import { useWorkoutContext } from '../hooks/useWorkoutContext';
 
+
 const WorkoutForm = ({ currentID, setCurrentID }) => {
+  const {user} = useAuthContext()
   const [workoutData, setWorkoutData] = useState({
     title: '',
     load: 0,
@@ -25,6 +28,10 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!user) {
+      setError('You must be logged in')
+      return
+    }
     const workout = { ...workoutData };
     let response = null;
     if (!currentID) {
@@ -33,6 +40,7 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
         body: JSON.stringify(workout),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
         },
       });
     } else {
@@ -41,6 +49,7 @@ const WorkoutForm = ({ currentID, setCurrentID }) => {
         body: JSON.stringify(workout),
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
         },
       });
     }
